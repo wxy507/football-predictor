@@ -1,0 +1,28 @@
+name: Daily Football Data Update
+on:
+  schedule:
+    - cron: '0 2,10,18 * * *'
+  workflow_dispatch:
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Fetch match data
+        run: node scraper/fetch-matches.js
+      - name: Commit and push if changed
+        run: |
+          git config user.name "football-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add js/matches.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: auto-update match data [$(date +'%Y-%m-%d %H:%M')]"
+            git push
+          fi

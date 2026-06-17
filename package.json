@@ -1,0 +1,8 @@
+{
+  "name": "football-predictor",
+  "version": "2.0.0",
+  "description": "足球赛事预测网站 - 纯静态版，可部署至 GitHub Pages",
+  "scripts": {
+    "dev": "npx serve ."
+  }
+}
